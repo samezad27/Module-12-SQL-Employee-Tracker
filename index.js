@@ -1,4 +1,4 @@
-const { prompt } = require("inquirer");
+const { prompt, default: inquirer } = require("inquirer");
 const db = require("./db/connection");
 const {
   viewAllDepartments,
@@ -27,7 +27,10 @@ const start = async () => {
         "Add a department",
         "Add a role",
         "Add an employee",
-        "Update an employee role",
+        "Remove a department",
+        "Remove a role",
+        "Remove an employee",
+        "Update an employee",
         "Exit",
       ],
     },
@@ -47,14 +50,60 @@ const start = async () => {
       results = await viewAllRoles();
       console.table(results[0]);
       break;
+
+    // add a department works
     case "Add a department":
-      results = await addDepartment();
+      const { name } = await prompt([
+        {
+          type: "input",
+          name: "name",
+          message: "What department do you want to add?",
+        },
+      ]);
+      results = await addDepartment(name);
       console.table(results[0]);
       break;
+    //add a role does not work -- look into inquirer
+
     case "Add a role":
-      results = await addRole();
-      console.table(results[0]);
-      break;
+      async function addRole() {
+        try {
+          const department = await viewAllDepartments();
+          const { title, salary, department_id } = await inquirer.prompt([
+            {
+              type: "input",
+              role: "title",
+              message: "What role do you want to add?",
+            },
+            {
+              type: "input",
+              salary: "salary",
+              message: "What is the salary?",
+            },
+            {
+              type: "list",
+              name: "department_id",
+              message: "Select the department",
+              choices: department.map((dpt) => {
+                return {
+                  value: dpt.id,
+                  name: dpt.name,
+                };
+              }),
+            },
+          ]);
+          await db.query(
+            `INSERT into role (title, salary, department_id) VALUES ("${title}", "${salary}", "${department_id}")`
+          );
+          const newRole = await viewRoles();
+          return newRole;
+        } catch (err) {
+          console.log(err);
+        }
+      }
+
+    // add an employee has not started
+    /*
     case "Add an employee":
       results = await addEmployee();
       console.table(results[0]);
@@ -74,11 +123,11 @@ const start = async () => {
     case "Update an employee":
       results = await updateEmployee();
       console.table(results[0]);
-      break;
+      break;  */
     case "Exit":
       process.exit();
   }
-  start();
+  start(true);
 };
 
-start();
+start(false);
