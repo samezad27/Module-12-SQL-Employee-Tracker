@@ -36,7 +36,7 @@ const start = async () => {
     },
   ]);
 
-  let results;
+  console.log(choice);
   switch (choice) {
     case "View all departments":
       results = await viewAllDepartments();
@@ -63,7 +63,7 @@ const start = async () => {
       results = await addDepartment(name);
       console.table(results[0]);
       break;
-    //add a role does not work -- look into inquirer
+    //add a role does not work
 
     case "Add a role":
       async function addRole() {
@@ -95,19 +95,18 @@ const start = async () => {
           await db.query(
             `INSERT into role (title, salary, department_id) VALUES ("${title}", "${salary}", "${department_id}")`
           );
-          const newRole = await viewRoles();
+          const newRole = await viewAllRoles();
           return newRole;
         } catch (err) {
           console.log(err);
         }
       }
 
-    // add an employee has not started
-    /*
     case "Add an employee":
       results = await addEmployee();
       console.table(results[0]);
       break;
+
     case "Remove an employee":
       results = await removeEmployee();
       console.table(results[0]);
@@ -117,13 +116,13 @@ const start = async () => {
       console.table(results[0]);
       break;
     case "Remove a department":
-      results = await removeDepartment();
-      console.table(results[0]);
+      const removedDepartment = await removeDepartment();
+      console.table(removedDepartment);
       break;
-    case "Update an employee":
-      results = await updateEmployee();
-      console.table(results[0]);
-      break;  */
+    case "Update an Employee":
+      const updatedEmployee = await updateEmployee();
+      console.table(updatedEmployee);
+      break;
     case "Exit":
       process.exit();
   }
