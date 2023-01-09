@@ -51,6 +51,29 @@ async function removeDepartment() {
 
 //need to remove departments
 
+async function removeDepartment() {
+  try {
+    const viewDepartments = await viewAllDepartments();
+    const { id } = await inquirer.prompt([
+      {
+        type: "list",
+        message: `What department has been removed?`,
+        name: "id",
+        choices: viewDepartments.map((department) => {
+          return {
+            name: department.name,
+            value: department.id,
+          };
+        }),
+      },
+    ]);
+    await db.query(`DELETE FROM department WHERE id = ${id}`);
+    return await viewAllDepartments();
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 //export functions:
 
 module.exports = { viewAllDepartments, addDepartment, removeDepartment };

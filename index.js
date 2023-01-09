@@ -66,41 +66,9 @@ const start = async () => {
     //add a role does not work
 
     case "Add a role":
-      async function addRole() {
-        try {
-          const department = await viewAllDepartments();
-          const { title, salary, department_id } = await inquirer.prompt([
-            {
-              type: "input",
-              role: "title",
-              message: "What role do you want to add?",
-            },
-            {
-              type: "input",
-              salary: "salary",
-              message: "What is the salary?",
-            },
-            {
-              type: "list",
-              name: "department_id",
-              message: "Select the department",
-              choices: department.map((dpt) => {
-                return {
-                  value: dpt.id,
-                  name: dpt.name,
-                };
-              }),
-            },
-          ]);
-          await db.query(
-            `INSERT into role (title, salary, department_id) VALUES ("${title}", "${salary}", "${department_id}")`
-          );
-          const newRole = await viewAllRoles();
-          return newRole;
-        } catch (err) {
-          console.log(err);
-        }
-      }
+      const newRole = await addRole();
+      console.table(newRole);
+      break;
 
     case "Add an employee":
       results = await addEmployee();
@@ -112,8 +80,8 @@ const start = async () => {
       console.table(results[0]);
       break;
     case "Remove a role":
-      results = await removeRole();
-      console.table(results[0]);
+      const removedRole = await removeRole();
+      console.table(removedRole);
       break;
     case "Remove a department":
       const removedDepartment = await removeDepartment();
