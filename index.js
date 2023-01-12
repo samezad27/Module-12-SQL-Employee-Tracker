@@ -40,15 +40,15 @@ const start = async () => {
   switch (choice) {
     case "View all departments":
       results = await viewAllDepartments();
-      console.table(results[0]);
+      console.table(results);
       break;
     case "View all employees":
       results = await viewAllEmployees();
-      console.table(results[0]);
+      console.table(results);
       break;
     case "View all roles":
       results = await viewAllRoles();
-      console.table(results[0]);
+      console.table(results);
       break;
 
     // add a department works
@@ -61,7 +61,7 @@ const start = async () => {
         },
       ]);
       results = await addDepartment(name);
-      console.table(results[0]);
+      console.table(results);
       break;
     //add a role does not work
 
@@ -72,29 +72,30 @@ const start = async () => {
 
     case "Add an employee":
       results = await addEmployee();
-      console.table(results[0]);
+      console.table(results);
       break;
 
     case "Remove an employee":
       results = await removeEmployee();
-      console.table(results[0]);
+      console.table(results);
       break;
     case "Remove a role":
-      const removedRole = await removeRole();
-      console.table(removedRole);
+      results = await removeRole();
+      console.table(results);
       break;
     case "Remove a department":
-      const removedDepartment = await removeDepartment();
-      console.table(removedDepartment);
+      results = await removeDepartment();
+      console.table(results);
       break;
-    case "Update an Employee":
-      const updatedEmployee = await updateEmployee();
-      console.table(updatedEmployee);
+    case "Update an employee":
+      results = await updateEmployee();
+      console.table(results);
       break;
     case "Exit":
+      console.log("Have a nice day!");
       process.exit();
   }
-  start(true);
+  start(false);
 };
 
-start(false);
+start(true);

@@ -3,8 +3,8 @@ const inquirer = require("inquirer");
 
 async function viewAllDepartments() {
   try {
-    const departments = await db.promise().query("SELECT * FROM department");
-    console.log(departments);
+    const departments = await db.query("SELECT * FROM department");
+
     return departments;
   } catch (err) {
     console.log(err);
@@ -15,9 +15,9 @@ async function viewAllDepartments() {
 
 async function addDepartment(name) {
   try {
-    const dpt = await db
-      .promise()
-      .query("INSERT into department(name) VALUES (?)", [name]);
+    const dpt = await db.query("INSERT into department(name) VALUES (?)", [
+      name,
+    ]);
 
     const departments = await viewAllDepartments();
     return departments;
